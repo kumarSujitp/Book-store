@@ -11,6 +11,7 @@ function Header() {
             <Nav.Link href="#home">Home</Nav.Link>
             <Nav.Link href="#features">Book Listing</Nav.Link>
             <Nav.Link href="#pricing">Logout</Nav.Link>
+            <Nav.Link href="#pricing">Orders</Nav.Link>
           </Nav>
         {/* </Container> */}
       </Navbar>
