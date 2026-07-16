@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useFireBase } from "../../../shared/context/FireBaseContext";
 
-const BookListing = () => {
+const CreateBookLists = () => {
   const [bookName, setBookName] = useState("");
   const [isbnNumber, setIsbnNumber] = useState("")
   const [price, setPrice] = useState("")
@@ -68,4 +68,4 @@ const BookListing = () => {
   )
 }
 
-export default BookListing;
+export default CreateBookLists;

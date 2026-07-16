@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import BookCard from './BookCard'
 import { useFireBase } from '../../../shared/context/FireBaseContext'
 import { Col, Container, Row } from 'react-bootstrap';
+import BookCard from '../../book/components/BookCard';
 
-function Home() {
+function HomePage() {
     const[books,setBooks]=useState([])
     const {fetchBooks}=useFireBase();
     console.log('fetch',fetchBooks())
@@ -45,4 +45,4 @@ function Home() {
   )
 }
 
-export default Home
+export default HomePage;

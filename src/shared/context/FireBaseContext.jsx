@@ -3,12 +3,13 @@ import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } f
 
 import { createContext, useContext, useState } from "react";
 import {addDoc, collection, Firestore, getDoc, getDocs, getFirestore, getStorage} from "firebase/firestore"
+import { updateProfile } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 
 const fireBaseContext=createContext();
 
 const FireBaseProvider=({children})=>{
-    const[data,setData]=useState('sujit kumar')
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -29,6 +30,23 @@ const firebaseConfig = {
   const createUserUsingEmailPassword=(email,password)=>{
     return createUserWithEmailAndPassword(firebaseAuth,email,password);
   }
+
+  const updateUserProfile = (user, firstName, lastName) => {
+    return updateProfile(user, {
+      displayName: `${firstName} ${lastName}`,
+    });
+  };
+  
+  const saveUserToFirestore = (user, firstName, lastName) => {
+    return setDoc(doc(fireStore, "users", user.uid), {
+      uid: user.uid,
+      firstName,
+      lastName,
+      email: user.email,
+      createdAt: new Date(),
+    });
+  };
+  
 
   const loginWithEmailPassword=(email,password)=>{
     return signInWithEmailAndPassword(firebaseAuth,email,password)
@@ -55,9 +73,10 @@ const firebaseConfig = {
   const contextValue={
     createUserUsingEmailPassword,
     loginWithEmailPassword,
-    data,
     createBookStore,
-    fetchBooks
+    fetchBooks,
+    updateUserProfile,
+    saveUserToFirestore
   }
 
     return(<fireBaseContext.Provider value={contextValue}>
