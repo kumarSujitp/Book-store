@@ -18,14 +18,15 @@ const RegisterUser = () => {
   const { createUserUsingEmailPassword, updateUserProfile, saveUserToFirestore } = useFireBase()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    debugger
+    // e.preventDefault();
     // Trim values
     const firstName = fName.trim();
-    const lastName = lastName.trim();
+    const lName = lastName.trim();
     const userEmail = email.trim();
 
     // Validation
-    if (!firstName || !lastName || !userEmail || !password || !confirmPassword) {
+    if (!firstName || !lName || !userEmail || !password || !confirmPassword) {
       Alert("Please fill all fields.");
       return;
     }

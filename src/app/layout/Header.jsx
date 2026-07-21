@@ -1,31 +1,20 @@
-// import React from 'react'
-// import { Container, Nav, Navbar } from 'react-bootstrap'
-
-// function Header() {
-//   return (
-    
-//        <Navbar bg="dark" data-bs-theme="dark">
-
-//           <Navbar.Brand href="/">Bookify</Navbar.Brand>
-//           <Nav className="me-auto text-white">
-//             <Nav.Link href="/">Home</Nav.Link>
-//             <Nav.Link href="/create-book-list">Book Listing</Nav.Link>
-//             <Nav.Link href="/logout">Logout</Nav.Link>
-//             <Nav.Link href="#pricing">Orders</Nav.Link>
-//           </Nav>
-//       </Navbar>
-    
-//   )
-// }
-
-// export default Header
 
 import React from "react";
 import { Container, Nav, Navbar, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../shared/assets/css/Header.css";
+  import { signOut, getAuth } from "firebase/auth";
+
 
 function Header() {
+  const navigate=useNavigate()
+
+
+const handleLogout = async () => {
+  await signOut(getAuth());
+  navigate("/UserLogin", { replace: true });
+};
+
   return (
     <Navbar expand="lg" className="custom-navbar shadow">
       <Container>
@@ -50,9 +39,7 @@ function Header() {
               Orders
             </Nav.Link>
 
-            <Button
-              as={Link}
-              to="/logout"
+            <Button onClick={handleLogout}
               variant="light"
               className="logout-btn ms-lg-3 jistify-content-end"
             >

@@ -9,64 +9,62 @@ import PublicRoute from './app/routes/PublicRoute';
 import PrivateRoute from './app/routes/PrivateRoute';
 import Login from './features/auth/pages/Login';
 import RegisterUser from './features/auth/pages/RegisterUser';
-import { getAuth } from 'firebase/auth';
+import { useEffect, useState } from 'react';
+import { useFireBase } from './shared/context/FireBaseContext';
+
 
 
 function App() {
-  const auth=getAuth()
-  return (
-    <Router>
-         {/* <Header/> */}
-         {auth.currentUser && <Header />}
-        {/* <Routes> */}
-        {/* <Route path="/" element={<HomePage />} />
-        <Route path="/create-book-list" element={<CreateBookLists />} />
-        <Route path="/logout" element={<LogOut />} /> */}
-      {/* </Routes> */}
+const {user}=useFireBase()
 
-      <Routes>
-        
-        <Route
-            path="/"
-            element={
-                <PublicRoute>
-                    <Login/>
-                </PublicRoute>
-            }
-        />
+    console.log('rrrrrrrrrrrrrrrr',user)
 
-        <Route
-            path="/register-user"
-            element={
-                <PublicRoute>
-                    <RegisterUser />
-                </PublicRoute>
-            }
-        />
+    return (
+        <Router>
+            {user && <Header />}
+            <Routes>
 
-            <Route
-                path="/home"
-                element={
-                    <PrivateRoute>
-                        <HomePage />
-                    </PrivateRoute>
-                }
-            />
-            <Route
-                path="/create-book-list"
-                element={
-                    <PrivateRoute>
-                        <CreateBookLists />
-                    </PrivateRoute>
-                }
-            />
+                <Route
+                    path="/UserLogin"
+                    element={
+                        <PublicRoute>
+                            <Login />
+                        </PublicRoute>
+                    }
+                />
 
-        </Routes>
+                <Route
+                    path="/register-user"
+                    element={
+                        <PublicRoute>
+                            <RegisterUser />
+                        </PublicRoute>
+                    }
+                />
 
-    
-    </Router>
+                <Route
+                    path="/"
+                    element={
+                        <PrivateRoute>
+                            <HomePage />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/create-book-list"
+                    element={
+                        <PrivateRoute>
+                            <CreateBookLists />
+                        </PrivateRoute>
+                    }
+                />
 
-  );
+            </Routes>
+
+
+        </Router>
+
+    );
 }
 
 export default App;

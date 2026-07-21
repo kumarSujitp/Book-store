@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {addDoc, collection, Firestore, getDoc, getDocs, getFirestore, getStorage} from "firebase/firestore"
 import { updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
@@ -10,6 +10,9 @@ import { doc, setDoc } from "firebase/firestore";
 const fireBaseContext=createContext();
 
 const FireBaseProvider=({children})=>{
+  
+    const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -70,13 +73,27 @@ const firebaseConfig = {
     return data;
   };
 
+
+  useEffect(() => {
+    const auth = getAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+
+    return unsubscribe;
+  }, []);
+
+
   const contextValue={
     createUserUsingEmailPassword,
     loginWithEmailPassword,
     createBookStore,
     fetchBooks,
     updateUserProfile,
-    saveUserToFirestore
+    saveUserToFirestore,
+    user,loading
   }
 
     return(<fireBaseContext.Provider value={contextValue}>

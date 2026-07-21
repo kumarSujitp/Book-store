@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFireBase } from "../../../shared/context/FireBaseContext";
 import { Alert, Button } from "react-bootstrap";
 
@@ -12,8 +12,11 @@ const Login = () => {
   const [errorMessage,setErrorMessage]=useState("")
 
   const { loginWithEmailPassword } = useFireBase()
+  const navigate=useNavigate();
+
 
   const handleSubmit = async (e) => {
+    // alert('called')
     e.preventDefault();
     const userEmail = email.trim();
 
@@ -31,11 +34,15 @@ const Login = () => {
     try {
       const result = await loginWithEmailPassword(email, password);
 
-      Alert("User Login successfully!");
+      alert("User Login successfully!");
+      localStorage.setItem("loggedInUser",true)
       setEmail("");
       setPassword("");
       setErrorMessage("")
+      navigate("/")
     } catch (error) {
+      console.log("wwwwwwwwwwwwwwwww",error)
+
       switch (error.code) {
         case "auth/email-already-in-use":
             setErrorMessage("Email already exists.");
@@ -47,6 +54,10 @@ const Login = () => {
 
         case "auth/weak-password":
             setErrorMessage("Password is too weak.");
+          break;
+
+        case "auth/invalid-credential":
+            setErrorMessage("User does not Exist!");
           break;
 
         default:
@@ -77,7 +88,7 @@ const Login = () => {
                           <input type="email" className="form-control" placeholder="enter your email" aria-describedby="emailHelp" value={email}
                               onChange={(e) => setEmail(e.target.value)} id="email"
                               autoComplete="off" />
-                          {errorMessage && <h6 className='customCss' style={customCss}>{errorMessage}</h6>}
+                          {/* {errorMessage && <h6 className='customCss' style={customCss}>{errorMessage}</h6>} */}
                       </div>
 
 
@@ -86,7 +97,7 @@ const Login = () => {
                           <input type="password" className="form-control" value={password}
                               onChange={(e) => setPassword(e.target.value)} id="password"
                               autoComplete="off" />
-                          {errorMessage && <h6 className='customCss' style={customCss}>{errorMessage}</h6>}
+                          {/* {errorMessage && <h6 className='customCss' style={customCss}>{errorMessage}</h6>} */}
                       </div>
                       <Button variant="success" onClick={handleSubmit}>Login</Button>
                   </form>
