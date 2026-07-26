@@ -1,6 +1,6 @@
 
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useFireBase } from "../../../shared/context/FireBaseContext";
 
 const CreateBookLists = () => {
@@ -11,12 +11,26 @@ const CreateBookLists = () => {
   const [type, setType] = useState("");
 
 //   const fireBaseHook = useFireBase();
-  const { createUserUsingEmailPassword ,data,createBookStore} = useFireBase()
-  console.log('@@@@@@@@@@@@@@@@@@',useFireBase())
+  const {createBookStore} = useFireBase()
+  const navigate=useNavigate()
 
-  const createBooklists=async()=>{
-    await createBookStore(bookName,isbnNumber,price)
+  const createBooklists = async () => {
+  try {
+    console.log("Creating book...");
+    if(!bookName || !isbnNumber || !price){
+      setType("danger")
+      setMessage("Please fill required fields!")
+      return;
+    }
+
+    await createBookStore(bookName, isbnNumber, price);
+
+    console.log("Navigating...");
+    navigate("/");
+  } catch (err) {
+    console.error(err);
   }
+};
 
 
 
@@ -35,20 +49,20 @@ const CreateBookLists = () => {
           <form>
             <div className="mb-3">
               <label for="book" className="form-label">Book Name :</label>
-              <input type="text" className="form-control" placeholder="Enter your Book name"  aria-describedby="emailHelp" value={bookName}
+              <input type="text" className="form-control" placeholder="Enter your Book name"  aria-describedby="emailHelp" value={bookName} required
                 onChange={(e) => setBookName(e.target.value)} id="bookName"
                  autoComplete="off" />
 
             </div>
             <div className="mb-3">
               <label for="isbn" className="form-label">ISBN Number</label>
-              <input type="number" className="form-control"  value={isbnNumber} placeholder="enter your ISBN Number"
+              <input type="number" className="form-control"  value={isbnNumber} placeholder="enter your ISBN Number" required
                 onChange={(e) => setIsbnNumber(e.target.value)} id="isbn"
              autoComplete="off" />
             </div>
             <div className="mb-3">
               <label for="isbn" className="form-label">Price</label>
-              <input type="number" className="form-control"  value={price} placeholder="Enter Price"
+              <input type="number" className="form-control"  value={price} placeholder="Enter Price" required
                 onChange={(e) => setPrice(e.target.value)} id="price"
              autoComplete="off" />
             </div>

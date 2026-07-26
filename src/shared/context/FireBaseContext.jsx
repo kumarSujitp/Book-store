@@ -2,36 +2,35 @@ import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import {addDoc, collection, Firestore, getDoc, getDocs, getFirestore, getStorage} from "firebase/firestore"
+import { addDoc, collection, getDocs, getFirestore, } from "firebase/firestore"
 import { updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
+const fireBaseContext = createContext();
 
-const fireBaseContext=createContext();
+const FireBaseProvider = ({ children }) => {
 
-const FireBaseProvider=({children})=>{
-  
-    const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCU4kiMyUfJfzGRem1qknip4UHxre8Nsj4",
-  authDomain: "book-store-c2275.firebaseapp.com",
-  projectId: "book-store-c2275",
-  storageBucket: "book-store-c2275.firebasestorage.app",
-  messagingSenderId: "450532898207",
-  appId: "1:450532898207:web:07f35ad26e3eb5980c79aa"
-};
-  
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyCU4kiMyUfJfzGRem1qknip4UHxre8Nsj4",
+    authDomain: "book-store-c2275.firebaseapp.com",
+    projectId: "book-store-c2275",
+    storageBucket: "book-store-c2275.firebasestorage.app",
+    messagingSenderId: "450532898207",
+    appId: "1:450532898207:web:07f35ad26e3eb5980c79aa"
+  };
+
   // Initialize Firebase
   const fireBaseApp = initializeApp(firebaseConfig);
-  const firebaseAuth=getAuth(fireBaseApp)
-  const fireStore=getFirestore(fireBaseApp)
-  // const storage=getStorage(fireBaseApp);
+  const firebaseAuth = getAuth(fireBaseApp)
+  const fireStore = getFirestore(fireBaseApp)
 
-  const createUserUsingEmailPassword=(email,password)=>{
-    return createUserWithEmailAndPassword(firebaseAuth,email,password);
+  const createUserUsingEmailPassword = (email, password) => {
+    return createUserWithEmailAndPassword(firebaseAuth, email, password);
   }
 
   const updateUserProfile = (user, firstName, lastName) => {
@@ -39,7 +38,7 @@ const firebaseConfig = {
       displayName: `${firstName} ${lastName}`,
     });
   };
-  
+
   const saveUserToFirestore = (user, firstName, lastName) => {
     return setDoc(doc(fireStore, "users", user.uid), {
       uid: user.uid,
@@ -49,10 +48,10 @@ const firebaseConfig = {
       createdAt: new Date(),
     });
   };
-  
 
-  const loginWithEmailPassword=(email,password)=>{
-    return signInWithEmailAndPassword(firebaseAuth,email,password)
+
+  const loginWithEmailPassword = (email, password) => {
+    return signInWithEmailAndPassword(firebaseAuth, email, password)
   }
 
   const createBookStore = async (name, isbn, price) => {
@@ -62,7 +61,7 @@ const firebaseConfig = {
     })
   }
 
-    const fetchBooks = async () => {
+  const fetchBooks = async () => {
     const snapshot = await getDocs(collection(fireStore, "books"));
 
     const data = snapshot.docs.map((doc) => ({
@@ -86,22 +85,22 @@ const firebaseConfig = {
   }, []);
 
 
-  const contextValue={
+  const contextValue = {
     createUserUsingEmailPassword,
     loginWithEmailPassword,
     createBookStore,
     fetchBooks,
     updateUserProfile,
     saveUserToFirestore,
-    user,loading
+    user, loading
   }
 
-    return(<fireBaseContext.Provider value={contextValue}>
-        {children}
-    </fireBaseContext.Provider>);
-    
+  return (<fireBaseContext.Provider value={contextValue}>
+    {children}
+  </fireBaseContext.Provider>);
+
 }
 
 export default FireBaseProvider;
 
-export const useFireBase=()=>useContext(fireBaseContext)
+export const useFireBase = () => useContext(fireBaseContext)

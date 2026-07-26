@@ -26,7 +26,7 @@ function HomePage() {
     console.log(books)
 
   return (
-    <Container className='mt-3'>
+    <div className='container-fluid mt-3 p-4'>
   <Row>
     {books?.map((item) => (
       <Col 
@@ -35,13 +35,13 @@ function HomePage() {
         sm={6}
         md={4}
         lg={3}
-        className="mb-4 ml-3"
+        className="mb-4"
       >
         <BookCard data={item} />
       </Col>
     ))}
   </Row>
-</Container>
+</div>
   )
 }
 
